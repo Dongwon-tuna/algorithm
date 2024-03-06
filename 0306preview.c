@@ -50,6 +50,23 @@ int GCD_mod(int a, int b){
 
 }
 
+int GCD_recursion(int a, int b,int c){
+    if (c ==0)
+    {
+        printf("=========================Using recursion method=========================\n");
+    }
+    c = c+1;
+    printf("this is recursion:%d, %d\n",a,b);
+    if(b == 0){
+        return a;
+    }
+    else{
+        GCD_recursion(b,a%b,c);
+    }
+    
+    
+}
+
 void primeTester(int a){
     int cnt=0;
     for (int i = 1; i < a+1; i++)
@@ -74,12 +91,14 @@ int main(void){
     int input1,input2;
     printf("Input two numbers:");
     scanf("%d %d",&input1,&input2);
-    
+    int cnt = 0;
 
     int result1 = GCD_minus(input1,input2);
     int result2 = GCD_mod(input1,input2);
+    int result3 = GCD_recursion(input1,input2,cnt);
     printf("GCD_minus: %d\n",result1);
     printf("GCD_mod: %d\n",result2);
+    printf("GCD_recursion: %d\n",result3);
     primeTester(input1);
 
 
