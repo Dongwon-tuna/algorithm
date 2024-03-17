@@ -24,12 +24,12 @@ int primeSieve(int input){
         }
         
     }
-    printf("prime number is:");
+    printf("prime number is: ");
     for (int i = 1; i < input; i++)
     {
         if (arr[i]!=0)
         {
-            printf("%d,",arr[i]);
+            printf("%d ",arr[i]);
         }    
         
     }
