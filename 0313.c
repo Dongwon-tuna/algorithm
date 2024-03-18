@@ -1,28 +1,28 @@
+#define _CRT_SECURE_NO_WARNINGS
+#pragma warning(disable: 4996)
 #include <stdio.h>
-#include <stdlib.h>
 
+void hanoi(int n, int from, int by, int to);
+void move(int from, int to);
 
-void move(int from, int to){
-    printf("\nMove from %d to %d",from,to);
+void main() {
+	int h = 0;
+	
+	printf("\nInput the height of hanoi tower: ");
+	scanf("%d", &h);
+	hanoi(h, 1, 2, 3);	
 }
 
-void hanoi(int n, int from, int by, int to){
-    if(n==1){
-        move(from, to);
-    }
-    else{
-        hanoi(n-1,from,to,by);
-        move(from,to);
-        hanoi(n-1,by,from,to);
-    }
+void hanoi(int n, int from, int by, int to) {
+	if (n == 1)
+		move(from, to);
+	else {
+		hanoi(n - 1, from, to, by);
+		move(from, to);
+		hanoi(n - 1, by, from, to);
+	}
 }
 
-void main(){
-        printf("Input the tower height:");
-        int height;
-        scanf("%d",&height);
-        hanoi(height,1,2,3);
-    
-    
-
+void move(int from, int to) {
+	printf("\nMove from P%d to P%d", from, to);
 }
