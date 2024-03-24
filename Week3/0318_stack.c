@@ -4,7 +4,7 @@
 //stack push pop
 #define MAX 10
 int stack[MAX];
-int top;
+int top = -1;
 
 void init_stack(void){
     top = -1;
@@ -16,8 +16,9 @@ int push(int t){
         printf("Stack overflow!\n");
         return -1;
     }
-
-    stack[++top] = t;//top 증가시키고 그 리고 값 복사
+    top++;
+    //printf("top: %d t: %d\n",top,t);
+    stack[top] = t;//top 증가시키고 그 리고 값 복사
     return t;
     
 }
@@ -32,35 +33,45 @@ int pop(){
 }
 
 
-int main(void){
+
+void pushing(){
     int k;
+    int cnt =0;
     init_stack;
+    printf("inti top: %d\n",top);
     while (1)
     {
-
-        printf("Input num(if you want quit, input 11)\n");
         scanf("%d",&k);
-        if (k == 11)
-        {
-            break;
-        }
         
-        int s = push(k);
-        if(s==-1){
+        int y = push(k);
+        if (y == 100)
+        {
+            pop(y);
             break;
             
         }
-    }
-    while (1)
-    {
-        
-        int k = pop();
-        if (top == -1)
+        else if (y == -1)
         {
             break;
-
         }
-        printf("Pop: %d top: %d\n",k,top);        
+        
+        
     }
+
+}
+
+void poping(){
+    for (int i = top; i >=0; i--)
+    {
+        printf("pop: %d, top: %d\n",pop(i),top);
+    }
+}
+
+int main(void){
+    
+    pushing();
+    poping();
+    
+    
   
 }
