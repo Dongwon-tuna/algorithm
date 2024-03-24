@@ -30,9 +30,9 @@ void recur_fill(int x, int y){
     recur_fill(x, y - 1);	
     recur_fill(x, y + 1);
     recur_fill(x + 1, y + 1);//대각성분까지 모두 탐색
-    recur_fill(x + 1, y + -1);
+    recur_fill(x + 1, y - 1);
     recur_fill(x - 1, y + 1);
-    recur_fill(x -1 , y - 1);	
+    recur_fill(x - 1 , y - 1);	
     
 }
 void main(){
