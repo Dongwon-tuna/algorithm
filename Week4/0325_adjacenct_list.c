@@ -37,11 +37,14 @@ void input_adjlist(node *a[], int *V, int *E) {
         t->vertex = name2int(vertex[1]);
         t->next = a[i];
         a[i] = t;
+        printf(" vertex: %d t->next: %d a[%d]: %d\n",t->vertex,t->next,i,a[i]);
         i = name2int(vertex[1]);
         t = (node *)malloc(sizeof(node));
         t->vertex = name2int(vertex[0]);
         t->next = a[i];
+        //printf(" vertex: %d t->next: %d\n",t->vertex,t->next);
         a[i] = t;
+        printf(" vertex: %d t->next: %d a[%d]: %d\n",t->vertex,t->next,i,a[i]);
     }
 }
 
@@ -51,6 +54,7 @@ void print_adjlist(node *a[],int V){
     {
         printf("Vertex %c:",int2name(i));
         temp= a[i];
+        printf("a[%d] : %d\n",i,a[i]);
         while (temp !=NULL)
         {
             printf("%c ",int2name(temp->vertex));
