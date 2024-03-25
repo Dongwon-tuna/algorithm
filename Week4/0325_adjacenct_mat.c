@@ -15,7 +15,7 @@ char int2name(int i) {
 void input_adjmatrix(int a[][MAX_NODE], int *V, int *E) {
     char vertex[3];
     int i, j, k;
-    printf("노드와 간선의 수를 입력하세요: ");
+    printf("node num, edge: ");
     scanf("%d %d", V, E);
     for (i = 0; i < *V; i++) {
         for (j = 0; j < *V; j++) {
@@ -26,7 +26,7 @@ void input_adjmatrix(int a[][MAX_NODE], int *V, int *E) {
         a[i][i] = 1;
     }
     for (k = 0; k < *E; k++) {
-        printf("\n간선을 이루는 두 노드를 입력하세요: ");
+        printf("\nedge between node(ex: AB): ");
         scanf("%s", vertex);
         i = name2int(vertex[0]);
         j = name2int(vertex[1]);
@@ -37,7 +37,7 @@ void input_adjmatrix(int a[][MAX_NODE], int *V, int *E) {
 
 void print_adjmatrix(int a[][MAX_NODE], int V) {
     int i, j;
-    printf("\n인접 행렬:\n");
+    printf("\nMatrix:\n");
     for (i = 0; i < V; i++) {
         for (j = 0; j < V; j++) {
             printf("%d ", a[i][j]);
