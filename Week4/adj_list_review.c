@@ -15,7 +15,7 @@ char int2char(int i){
     return i +'A';
 }
 
-node *LA[100];
+node *LA[100];//포인터 배열 >>주소를 저장해줌
 
 void adjlist(node *a[],int *V, int *E){
     int i,j;
@@ -35,10 +35,10 @@ void adjlist(node *a[],int *V, int *E){
         t = (node*)malloc(sizeof(node));
         t->node = char2int(vrtex[0]);
         t->next = a[i];
-        a[i] = t;
+        a[i] = t;//포인터 배열 첫번째 방에 t의 주소를 저장하여서
         i = char2int(vrtex[0]);
         t = (node*)malloc(sizeof(node));
-        t->node = char2int(vrtex[1]);
+        t->node = char2int(vrtex[1]);//다음과 같은 방법으로 구조체의 요소에 값을 삽입 가능
         t->next = a[i];
         a[i] = t;
     }
