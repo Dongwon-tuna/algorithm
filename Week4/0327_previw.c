@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_NODE 10
+#define MAX_NODE 100
 #define MAX 10
 
 int stack[MAX];
@@ -163,12 +163,120 @@ void nrDFS_adjmarix(int a[][MAX_NODE],int V){
     
 }
 
-int main() {
+typedef struct _node{
+    int vertex;//vertex 변수는 노드의 값, 즉 노드가 표현하는 정점(vertex)을 나타냅니다.
+    struct _node *next;//둘째, next 포인터는 다음 노드를 가리키는 포인터입니다. 이는 그래프의 간선을 표현하는 역할을 합니다.
+}node;
+
+
+
+node *GL[MAX_NODE];
+
+void input_adjlist(node *a[], int *V, int *E) {
+    char vertex[3];
+    int i, j;
+    node *t;
+    printf("input the num of node & edge\n");
+    scanf("%d %d", V, E);
+    for (i = 0; i < *V; i++) {
+        a[i] = NULL;
+    }
+
+    for (j = 0; j < *E; j++) {
+        printf("\ninput the two node consist of edge\n");
+        scanf("%s", vertex);
+        i = name2int(vertex[0]);
+        t = (node *)malloc(sizeof(node));
+        t->vertex = name2int(vertex[1]);
+        t->next = a[i];
+        a[i] = t;
+        //printf("vertex: %d t->next: %d a[%d]: %d\n",t->vertex,t->next,i,a[i]);
+        i = name2int(vertex[1]);
+        t = (node *)malloc(sizeof(node));
+        t->vertex = name2int(vertex[0]);
+        t->next = a[i];
+        //printf(" vertex: %d t->next: %d\n",t->vertex,t->next);
+        a[i] = t;
+        //printf("vertex: %c t->next: %d a[%d]: %d\n",t->vertex,t->next,i,a[i]);
+    }
+}
+
+
+void DFS_recur_list(node *a[],int V, int i){
+    node *t;
+    check[i] = 1;
+    visit(i);
+    for (t = a[i] ; t!=NULL; t=t->next)
+    {
+        if (check[t->vertex]==0)
+        {
+            DFS_recur_list(a,V,t->vertex);
+        }
+        
+    }
+
+}
+
+
+
+void DFS_adjlist(node *a[],int V){
+    int i;
+    for(i =0;i<V;i++){
+        check[i] = 0;
+    }
+    for ( i = 0; i < V; i++)
+    {
+        DFS_recur_list(a,V,i);
+    }
+    
+}
+
+void print_adjlist(node *a[],int V){
+    node *temp;
+    for (int i = 0; i < V; i++)
+    {
+        printf("Vertex %c:",int2name(i));
+        temp= a[i];
+        //printf("a[%d] : %d\n",i,a[i]);
+        while (temp !=NULL)
+        {
+            printf("%c ",int2name(temp->vertex));
+            temp = temp->next;
+        }
+        printf("\n");
+        
+    }
+    
+
+}
+
+void adjmatrix_func(){
+    printf("==================Adjmatrix==================\n");
     int V, E;
     input_adjmatrix(GM, &V, &E);
     print_adjmatrix(GM, V);
+    printf("==Recursive result==\n");
     DFS_recur_marix(GM,V,0);
     //DFS_adjmarix(GM,V);
+    printf("==nonRecursive result==\n");
     nrDFS_adjmarix(GM,V);
+
+}
+
+void adjlist_func(){
+    int V,E;
+
+    printf("==================Adjlist==================\n");
+    input_adjlist(GL,&V,&E);
+    print_adjlist(GL,V);
+    printf("==Recursive result==\n");
+    DFS_recur_list(GL,V,0);
+
+}
+
+int main() {
+    //adjmatrix_func();
+    adjlist_func();
+
     return 0;
 }
