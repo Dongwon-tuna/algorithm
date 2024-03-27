@@ -3,7 +3,7 @@
 #include <string.h>
 
 #define MAX_NODE 100
-#define MAX 10
+#define MAX 90
 
 int stack[MAX];
 int top =-1;
@@ -42,6 +42,7 @@ int is_stack_empty(){
 
 
 int check[MAX_NODE];
+int check2[MAX_NODE];
 
 
 int GM[MAX_NODE][MAX_NODE];
@@ -203,14 +204,14 @@ void input_adjlist(node *a[], int *V, int *E) {
 
 
 void DFS_recur_list(node *a[],int V, int i){
-    node *t;
-    check[i] = 1;
+    node *k;
+    check2[i] = 1;
     visit(i);
-    for (t = a[i] ; t!=NULL; t=t->next)
+    for (k = a[i] ; k!=NULL; k=k->next)
     {
-        if (check[t->vertex]==0)
+        if (check2[k->vertex]==0)
         {
-            DFS_recur_list(a,V,t->vertex);
+            DFS_recur_list(a,V,k->vertex);
         }
         
     }
@@ -222,11 +223,15 @@ void DFS_recur_list(node *a[],int V, int i){
 void DFS_adjlist(node *a[],int V){
     int i;
     for(i =0;i<V;i++){
-        check[i] = 0;
+        check2[i] = 0;
     }
     for ( i = 0; i < V; i++)
     {
-        DFS_recur_list(a,V,i);
+        if (check2[i] == 0)
+        {
+            DFS_recur_list(a,V,i);
+        }
+ 
     }
     
 }
@@ -250,14 +255,16 @@ void print_adjlist(node *a[],int V){
 
 }
 
+
+
 void adjmatrix_func(){
     printf("==================Adjmatrix==================\n");
     int V, E;
     input_adjmatrix(GM, &V, &E);
     print_adjmatrix(GM, V);
     printf("==Recursive result==\n");
-    DFS_recur_marix(GM,V,0);
-    //DFS_adjmarix(GM,V);
+    //DFS_recur_marix(GM,V,0);
+    DFS_adjmarix(GM,V);
     printf("==nonRecursive result==\n");
     nrDFS_adjmarix(GM,V);
 
@@ -270,13 +277,14 @@ void adjlist_func(){
     input_adjlist(GL,&V,&E);
     print_adjlist(GL,V);
     printf("==Recursive result==\n");
-    DFS_recur_list(GL,V,0);
+    //DFS_recur_list(GL,V,0);
+    DFS_adjlist(GL,V);
 
 }
 
 int main() {
-    //adjmatrix_func();
+    adjmatrix_func();
     adjlist_func();
-
+    //========================IFDEF 사용법 익혀보기..
     return 0;
 }
