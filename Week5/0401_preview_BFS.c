@@ -4,7 +4,7 @@
 
 #define MAX_NODE 100
 #define MAX 90
-int cnt = 0;
+
 typedef struct _dnode{
     int key;
     struct _dnode *prev;
@@ -160,6 +160,7 @@ void print_adjlist(dnode *a[],int V){
 void BFS_adjmatrix(int a[][MAX_NODE], int V)
 {
     int i, j;
+    int cnt = 0;
     init_queue();
     for(i = 0; i<V; i++) check[i] = 0;
     for(i = 0; i<V; i++){
@@ -181,6 +182,7 @@ void BFS_adjmatrix(int a[][MAX_NODE], int V)
             }   
         }
     }
+    printf("Number of graph loops: %d\n",cnt);
 }
 
 
@@ -227,7 +229,6 @@ void adjmatrix_func(){
     print_adjmatrix(GM, V);
     printf("===BFS adjmat===\n");
     BFS_adjmatrix(GM,V);
-    printf("connected: %d \n",cnt);
 
 }
 
@@ -244,8 +245,6 @@ void adjlist_func(){
 }
 
 void main(){
-        
-    printf("hello world\n");
     adjmatrix_func();
     adjlist_func();
 }
