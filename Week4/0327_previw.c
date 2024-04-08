@@ -283,7 +283,7 @@ void adjlist_func(){
 }
 
 int main() {
-    adjmatrix_func();
+    //adjmatrix_func();
     adjlist_func();
     //========================IFDEF 사용법 익혀보기..
     return 0;
