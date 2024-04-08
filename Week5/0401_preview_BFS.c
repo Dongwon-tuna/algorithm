@@ -246,5 +246,5 @@ void adjlist_func(){
 
 void main(){
     adjmatrix_func();
-    adjlist_func();
+    //adjlist_func();
 }
