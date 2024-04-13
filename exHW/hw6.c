@@ -4,7 +4,7 @@
 #include <math.h>
 #define _CRT_SECURE_NO_WARNINGS
 #pragma warning(disable: 4996)
-#define WIDTHBYTES(bits) (((bits)+31)/32*4) // ºñÆ®¸Ê ÆÄÀÏ ±Ô°Ý¿¡¼±, °¡·Î¹æÇâ µ¥ÀÌÅÍ Å©±â´Â 4ÀÇ ¹è¼ö(¹ÙÀÌÆ®´ÜÀ§)·Î ÇÑ´Ù.
+#define WIDTHBYTES(bits) (((bits)+31)/32*4) 
 // ¿Ö?? -> ÀÌÀ¯¸¦ Ã£¾Æ¼­ ·¹Æ÷Æ®¿¡ Ã·ºÎ
 #define BYTE unsigned char
 FILE* file;// ÆÄÀÏ Æ÷ÀÎÅÍ ¼±¾ð
