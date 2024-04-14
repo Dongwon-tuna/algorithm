@@ -1,294 +1,58 @@
+#define _CRT_SECURE_NO_WARNINGS
+#pragma warning(disable : 4996)
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #define MAX_NODE 100
-#define MAX 90
-
-typedef struct _dnode{
-    int key;
-    struct _dnode *prev;
-    struct _dnode *next;
-}dnode;
-
-dnode *head, *tail;
-
-int check[MAX_NODE];
-int check2[MAX_NODE];
-
-
 int GM[MAX_NODE][MAX_NODE];
-dnode *GL[MAX_NODE];
+FILE* fp;
 
-int name2int(char c) {
-    return c - 'A';
+int name2int(char c) {		// 문자를 숫자로 바꾼다. 만약 'B'가 입력되면 
+	return c - 'A';			// 'B' - 'A' =  1 (아스키코드값으로 변환되어 계산됨)
 }
 
-char int2name(int i) {
-    return i + 'A';
+char int2name(int i) {		// 숫자를 문자로 바꾼다.
+	return i + 'A';
 }
 
-int visit(int k){
-    printf("%d\n",k);
-}
-
-void init_queue(){
-    head = (dnode*)calloc(1,sizeof(dnode));
-    tail = (dnode*)calloc(1,sizeof(dnode));
-    head->prev = head;
-    head->next = tail;
-    tail->prev = head;
-    tail->next = tail;
-}
-
-int put(int k){//k는 데이터
-    dnode *t;
-    if((t=(dnode*)malloc(sizeof(dnode)))==NULL){
-        printf("out of memory!\n");
-        return -1;
-    }
-    t->key = k;
-    tail->prev->next = t;
-    t->prev = tail->prev;
-    tail->prev = t;
-    t->next = tail;
-    return k;
-}
-
-int get(){
-    dnode *t;
-    int k;
-    t = head->next;
-    if (t == tail)
-    {
-        printf("underflow\n");
-        return-1;
-    }
-    k = t->key;
-    head->next = t->next;
-    t->next->prev = head;
-    free(t);
-    return k;
-    
-}
-//============================================================adjmat, adjlist
-void input_adjmatrix(int a[][MAX_NODE], int *V, int *E) {
-    char vertex[3];
-    int i, j, k;
-    printf("node num, edge: ");
-    scanf("%d %d", V, E);
-    for (i = 0; i < *V; i++) {
-        for (j = 0; j < *V; j++) {
-            a[i][j] = 0; // 각 요소를 0으로 초기화
-        }
-    }
-    for (i = 0; i < *V; i++) {
-        a[i][i] = 1;
-    }
-    for (k = 0; k < *E; k++) {
-        printf("\nedge between node(ex: AB): ");
-        scanf("%s", vertex);
-        i = name2int(vertex[0]);
-        j = name2int(vertex[1]);
-        a[i][j] = 1;
-        a[j][i] = 1;
-    }
-}
-
-void input_adjlist(dnode *a[], int *V, int *E) {
-    char vertex[3];
-    int i, j;
-    dnode *t;
-    printf("input the num of node & edge\n");
-    scanf("%d %d", V, E);
-    for (i = 0; i < *V; i++) {
-        a[i] = NULL;
-    }
-
-    for (j = 0; j < *E; j++) {
-        printf("\ninput the two node consist of edge\n");
-        scanf("%s", vertex);
-        i = name2int(vertex[0]);
-        t = (dnode *)malloc(sizeof(dnode));
-        t->key = name2int(vertex[1]);
-        t->next = a[i];
-        a[i] = t;
-        //printf("vertex: %d t->next: %d a[%d]: %d\n",t->vertex,t->next,i,a[i]);
-        i = name2int(vertex[1]);
-        t = (dnode *)malloc(sizeof(dnode));
-        t->key = name2int(vertex[0]);
-        t->next = a[i];
-        //printf(" vertex: %d t->next: %d\n",t->vertex,t->next);
-        a[i] = t;
-        //printf("vertex: %c t->next: %d a[%d]: %d\n",t->vertex,t->next,i,a[i]);
-    }
-}
-//============================================================print mat, list
-
-void print_adjmatrix(int a[][MAX_NODE], int V) {
-    int i, j;
-    printf("\nMatrix:\n");
-    for (i = 0; i < V; i++) {
-        for (j = 0; j < V; j++) {
-            printf("%d ", a[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-void print_adjlist(dnode *a[],int V){
-    dnode *temp;
-    for (int i = 0; i < V; i++)
-    {
-        printf("Vertex %c:",int2name(i));
-        temp= a[i];
-        //printf("a[%d] : %d\n",i,a[i]);
-        while (temp !=NULL)
-        {
-            printf("%c ",int2name(temp->key));
-            temp = temp->next;
-        }
-        printf("\n");
-        
-    }
-    
-
-}
-
-//============================================================adjlist ,mat BFS
-
-void BFS_adjmatrix(int a[][MAX_NODE], int V)
-{
-    int i, j;
-    int cnt = 0;
-    init_queue();
-    for(i = 0; i<V; i++) check[i] = 0;
-    for(i = 0; i<V; i++){
-        if(check[i] == 0){
-            ++cnt;
-            put(i);
-            check[i] = 1;
-            while(!(head->next == tail)){//queue_empty()
-                i = get();
-                visit(i);
-                for( j = 0; j<V; j++){
-                    if(a[i][ j] != 0){
-                        if(check[j] == 0){
-                            put( j);
-                            check[j] = 1;
-                        }
-                    }
-                }
-            }   
-        }
-    }
-    printf("Number of graph loops: %d\n",cnt);
-}
-
-
-void BFS_adjlist(dnode *a[],int V){
-    int i;
-    dnode *t;
-    init_queue();
-    for ( i = 0; i < V; i++)
-    {
-        check2[i] = 0;
-    }
-    for ( i = 0; i < V; i++)
-    {
-        if (check2[i]==0)
-        {
-            put(i);
-            check2[i] = 1;
-            while(!(head->next == tail)){//queue_empty()
-                i = get();
-                visit(i);
-                for (t =a[i]; t != NULL; t=t->next)
-                {
-                    if (check2[t->key]==0)
-                    {
-                        put(t->key);
-                        check2[t->key] = 1;
-                    }
-                    
-                }
-                
-            }
-            
-        }
-        
-    }  
-    
-}
-
-//AP
-int order, son_of_root;
-int visit_order[MAX_NODE];
-
-int AP_recur(dnode* a[], int i) {
-	dnode* t;
-	int min, m;
-	visit_order[i] = min = ++order;
-	for (t = a[i]; t != NULL; t = t->next) {
-		if (i == 0 && visit_order[t->key] == 0)
-			son_of_root++;
-		if (visit_order[t->key] == 0) {	// 처음 방문이면
-			m = AP_recur(a, t->key);		// t->vertex의 child 중에서 parent 위로 가는 것이 있는지
-			if (m < min) min = m;
-			if (m >= visit_order[i] && i != 0)		// parent 보다 위로 가는 것이 없다면
-				printf(" * %c %2d : %d\n", int2name(i), visit_order[i], m);		// parent = AP
-			else
-				printf("   %c %2d : %d\n", int2name(i), visit_order[i], m);		// 그렇지 않다면 AP 아님
-		}
-		else
-			if (visit_order[t->key] < min)	// nontree edge
-				min = visit_order[t->key];
+void input_adjmatrix(int a[][MAX_NODE], int* V, int* E) {		// main 함수 내의 V, E값을 바꿔야하므로 포인터값을 파라미터로 가짐
+	char vertex[3];						// 연결된 두 문자를 받기위한 배열. 마지막 칸에는 널문자가 들어가야하므로 총 3칸의 배열 생성
+	int i, j, k;
+	int w;
+	printf("\nInput number of node & edge\n");
+	scanf("%d %d", V, E);			// # of node, edge
+	for (i = 0; i < *V; i++)
+		for (j = 0; j < *V; j++)
+			a[i][j] = 0;			// 모든 원소의 값을 0으로 초기화
+	for (i = 0; i < *V; i++)
+		a[i][i] = 1;				// 대각 성분은 자기 자신이므로 모두 1
+	printf("\nInput two node consist of edge & weight -> ");
+	for (k = 0; k < *E; k++) {
+		scanf("%s %d", vertex, &w);		// AB 입력 받으면 vertex[0] = 'A', vertex[1] = 'B'
+		i = name2int(vertex[0]);	// 'A' -> 0
+		j = name2int(vertex[1]);	// 'B' -> 1
+		a[i][j] = w;				// AB 연결 = BA 연결
+		a[j][i] = w;
 	}
-	return min;
 }
 
-void AP_search(dnode* a[], int V)
-{
-	int i, n = 0;
-	dnode* t;
-	for (i = 0; i < V; i++) visit_order[i] = 0;
-	
-	order = son_of_root = 0;
-	
-	AP_recur(a, 0);
-	if (son_of_root > 1) 
-		printf("* ");
-	else
-		printf("  ");
-	printf(" %c son : %d\n", int2name(0), son_of_root);
+void print_adjmatrix(int a[][MAX_NODE], int V) {	// 배열을 출력
+	printf("\n");
+	int i, j;
+
+	for (i = 0; i < V; i++) {
+		printf("%3c", int2name(i));
+		for (j = 0; j < V; j++)
+			printf("%3d", a[i][j]);
+		printf("\n");
+	}
 }
 
+void main() {
+	int V, E;
 
-//=====================================================print func
-void adjmatrix_func(){
-    printf("==================Adjmatrix==================\n");
-    int V, E;
-    input_adjmatrix(GM, &V, &E);
-    print_adjmatrix(GM, V);
-    printf("===BFS adjmat===\n");
-    BFS_adjmatrix(GM,V);
+	input_adjmatrix(GM, &V, &E);
+	print_adjmatrix(GM, V);
 
-}
-
-void adjlist_func(){
-    int V,E;
-
-    printf("==================Adjlist==================\n");
-    input_adjlist(GL,&V,&E);
-    print_adjlist(GL,V);
-    printf("===BFS adjlist===\n");
-    BFS_adjlist(GL,V);
-    printf("===AP recur===\n");
-    AP_search(GL,V);
-
-}
-
-void main(){
-    //adjmatrix_func();
-    adjlist_func();
 }
