@@ -14,6 +14,7 @@ typedef struct node {
 node* G[MAX_NODE];		// adjlist를 하고난 결과 나온 배열
 int weight[MAX_NODE];	// 가중치를 저장하는 배열
 int parent[MAX_NODE];	// get한 노드를 어떤 노드가 넣어줬는지 알아내기위한 배열. 즉, 넣어준 노드가 부모 노드이다.
+FILE *fp;
 int nheap = 0;			// # of elements in the heap
 int heap[MAX_NODE];		// heap 배열
 
@@ -36,7 +37,7 @@ void input_adjlist(node* g[], int* V, int* E) {
 	node* t;	// list들을 서로 연결시키기 위한 구조체 포인터
 
 	printf("\nInput number of node & edge\n");
-	scanf("%d %d", V, E);
+	fscanf(fp,"%d %d", V, E);
 
 	for (i = 0; i < *V; i++)
 		g[i] = NULL;			// 처음 값들을 모두 NULL로 초기화 -> list의 끝이 NULL
@@ -44,7 +45,7 @@ void input_adjlist(node* g[], int* V, int* E) {
 	printf("\nInput two node consist of edge and weight\n");
 
 	for (j = 0; j < *E; j++) {
-		scanf("%s %d", vertex, &w);
+		fscanf(fp,"%s %d", vertex, &w);
 
 		i = name2int(vertex[0]);			
 		t = (node*)malloc(sizeof(node));	
@@ -156,7 +157,7 @@ void PFS_adjlist(node* g[], int V)
 
 	for (int i = 0; i < V; i++) {			// heap의 가중치와 부모 노드를 초기화
 		weight[i] = UNSEEN;					// 모든 노드 = unseen 노드
-		parent[i] = 0;						// initialize a tree
+		parent[i] = 0;						// 부모노드 확인
 	}
 
 	// 모든 노드를 돌면서
@@ -181,35 +182,32 @@ void PFS_adjlist(node* g[], int V)
 	}
 }
 
-// 최소 비용 출력
-void print_cost(int weight[], int V) {
-	int cost = 0;
-	for (int i = 1; i < V; i++) {
-		cost += weight[i];
-	}
-	printf("%d\n", cost);
-}
-
-// 자식 노드 - 부모 노드 출력
-void print_tree(int parent[], int V) {
-	printf("\n\nTree structure\n");
-
-	printf("son    ");
+void print_tree(int g[],int V){
+	printf("\n");
+	printf("Son:    ");
 	for (int i = 0; i < V; i++)
-		printf("%c ", int2name(i));
+	{
+		printf("%c ",int2name(i));
+	}
+	printf("\n");
+	printf("Parent: ");
+	for (int i = 0; i < V; i++)
+	{
+		printf("%c ",int2name(g[i]));
+	}
+	
+	
 
-	printf("\n----------------------------\n");
-
-	printf("parent   ");
-	for (int i = 1; i < V; i++)
-		printf("%c ", int2name(parent[i]));
 }
 
+void print_cost(int a[],int V){
+	
+}
 
 void main() {
 	int V, E;
 
-
+	fp = fopen("graph.txt","rt");
 	input_adjlist(G, &V, &E);
 	printf("\nOriginal graph\n");
 	print_adjlist(G, V);
@@ -217,13 +215,12 @@ void main() {
 	// PFS
 	printf("\n\nVisit order of Minimum Spanning Tree\n");
 	PFS_adjlist(G, V);
-
+	//
 	// 자식 - 부모 출력
 	print_tree(parent, V);
-
 	// 최소 비용 출력
-	printf("\n\nMinimum Cost is \n");
-	print_cost(weight, V);
-
+	//printf("\n\nMinimum Cost is \n");
+	//print_cost(weight, V);
+	fclose(fp);
 
 }
